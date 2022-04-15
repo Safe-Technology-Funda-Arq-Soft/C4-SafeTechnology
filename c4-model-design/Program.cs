@@ -19,32 +19,20 @@ namespace c4_model_design
             StructurizrClient structurizrClient = new StructurizrClient(apiKey, apiSecret);
             Workspace workspace = new Workspace("Software Design - C4 Model - Safe Technology", "Software Architecture Design Safe Technology");
             Model model = workspace.Model;
-
-            // SoftwareSystem psychoPlatform = model.AddSoftwareSystem("PsychoHelp Plataform", "Permite a los usuarios visualizar información y contactar a los psicologos disponibles");
-            // SoftwareSystem collegeApi = model.AddSoftwareSystem("CPSP API", "API del colegio de psicologos para verificar la informacion de los psicologos registrados.");
-            // SoftwareSystem paypalApi = model.AddSoftwareSystem("PayPal API", "API de la empresa PayPal que permite pagos de manera online");
-            // SoftwareSystem zoomApi = model.AddSoftwareSystem("Zoom API", "API de la empresa Zoom que permite servicios de videollamada");
-
+            
             SoftwareSystem safePlatform = model.AddSoftwareSystem("Safe Technology Platform", "Permite a los usuarios visualizar información y contactar con técnicos disponibles");
             SoftwareSystem stripeApi = model.AddSoftwareSystem("Stripe API", "API de la empresa Paypal que permite pagos de manera online");
             SoftwareSystem emailSystem = model.AddSoftwareSystem("E-mail System", "Sistema de e-mail que envía un correo de confirmación de cuenta");
 
             Person user = model.AddPerson("User", "Usuario de la plataforma");
             Person technical = model.AddPerson("Technical", "Usuario que presta sus servicios mediante la plataforma");
-            
-            // Person patient = model.AddPerson("Patient", "Usuario de la Plataforma.");
-            // Person psychologist = model.AddPerson("Psychologist", "Usuario que presta sus servicios profesionales mediante la plataforma");
 
             user.Uses(safePlatform, "Usa");
             technical.Uses(safePlatform, "Usa");
             safePlatform.Uses(stripeApi, "Permite los pagos dentro de la plataforma");
             safePlatform.Uses(emailSystem, "Envía e-mail de verificación de cuenta");
-            
-            // patient.Uses(psychoPlatform, "Usa");
-            // psychologist.Uses(psychoPlatform, "Usa");
-            // paypalApi.Uses(psychoPlatform, "Permite los pagos dentro de la plataforma");
-            // zoomApi.Uses(psychoPlatform, "Permite videollamadas dentro de la plataforma");
-            // psychoPlatform.Uses(collegeApi, "Consulta la información del psicologo");
+            emailSystem.Delivers(user, "Envía correo a");
+            emailSystem.Delivers(technical, "Envía correo a");
             
             ViewSet viewSet = workspace.Views;
 
@@ -52,16 +40,8 @@ namespace c4_model_design
             SystemContextView contextView = viewSet.CreateSystemContextView(safePlatform, "Contexto", "Diagrama de Contexto");
             contextView.PaperSize = PaperSize.A4_Landscape;
             contextView.AddAllSoftwareSystems();
-            contextView.AddAllPeople(); 
+            contextView.AddAllPeople();
 
-            // Tags
-            // psychoPlatform.AddTags("PlataformaPsico");
-            // collegeApi.AddTags("ColegioPsico");
-            // paypalApi.AddTags("PayPalA");
-            // zoomApi.AddTags("ZoomA");
-            // patient.AddTags("Paciente");
-            // psychologist.AddTags("Psicologo");
-            
             safePlatform.AddTags("platformSafe");
             stripeApi.AddTags("stripeA");
             emailSystem.AddTags("emailSystem");
@@ -73,8 +53,8 @@ namespace c4_model_design
             styles.Add(new ElementStyle("technical") { Background = "#03A9F4", Color = "#ffffff", Shape = Shape.Person });
             styles.Add(new ElementStyle("user") { Background = "#03A9F4", Color = "#ffffff", Shape = Shape.Person });
             styles.Add(new ElementStyle("platformSafe") { Background = "#009688", Color = "#ffffff", Shape = Shape.RoundedBox });            
-            styles.Add(new ElementStyle("stripeA") { Background = "#FF5722", Color = "#ffffff", Shape = Shape.RoundedBox });            
-            styles.Add(new ElementStyle("emailSystem") { Background = "#E1BEE7", Color = "#ffffff", Shape = Shape.RoundedBox });
+            styles.Add(new ElementStyle("stripeA") { Background = "#6b0023", Color = "#ffffff", Shape = Shape.RoundedBox });            
+            styles.Add(new ElementStyle("emailSystem") { Background = "#f568b5", Color = "#ffffff", Shape = Shape.RoundedBox });
             
             
             
@@ -100,6 +80,8 @@ namespace c4_model_design
 
             webApplication.Uses(singlePageApplication, "Entrega al navegador web del cliente");
             singlePageApplication.Uses(springBootApi, "Usa");
+            springBootApi.Uses(emailSystem, "Envía correo de verificación");
+        
 
             springBootApi.Uses(appointmentBoundedContext, "Llamada API a");
             springBootApi.Uses(publicationBoundedContext, "Llamada API a");
@@ -134,18 +116,18 @@ namespace c4_model_design
             dataBase.AddTags("DataBase");
             
             //Styles
-            styles.Add(new ElementStyle("WebApp") { Background = "#E64A19", Color = "#ffffff", Shape = Shape.WebBrowser});
-            styles.Add(new ElementStyle("PageApp") { Background = "#7C4DFF", Color = "#ffffff", Shape = Shape.RoundedBox});
-            styles.Add(new ElementStyle("SpringAPI") { Background = "#7C4DFF", Color = "#ffffff", Shape = Shape.RoundedBox});
+            styles.Add(new ElementStyle("WebApp") { Background = "#15ab92", Color = "#ffffff", Shape = Shape.WebBrowser});
+            styles.Add(new ElementStyle("PageApp") { Background = "#9acd32", Color = "#ffffff", Shape = Shape.RoundedBox});
+            styles.Add(new ElementStyle("SpringAPI") { Background = "#00276c", Color = "#ffffff", Shape = Shape.RoundedBox});
             
-            styles.Add(new ElementStyle("Appointment") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("Publication") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("TechnicalBC") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("UserBC") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("Report") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("Payment") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });            
-            styles.Add(new ElementStyle("Category") { Background = "#F8BBD0", Color = "#ffffff", Shape = Shape.Hexagon });    
-            styles.Add(new ElementStyle("DataBase") { Background = "#B71DDE", Color = "#ffffff", Shape = Shape.Cylinder });
+            styles.Add(new ElementStyle("Appointment") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("Publication") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("TechnicalBC") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("UserBC") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("Report") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("Payment") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });            
+            styles.Add(new ElementStyle("Category") { Background = "#ff9800", Color = "#ffffff", Shape = Shape.Hexagon });    
+            styles.Add(new ElementStyle("DataBase") { Background = "#E00000", Color = "#ffffff", Shape = Shape.Cylinder });
 
             ContainerView containerView = viewSet.CreateContainerView(safePlatform, "Contenedor", "Diagrama de contenedores");
             contextView.PaperSize = PaperSize.A3_Landscape;
@@ -157,7 +139,6 @@ namespace c4_model_design
             Component appointmentRepository = appointmentBoundedContext.AddComponent("Appointment Repository", "Repositorio que provee los métodos para la persistencia de los datos de las citas.", "");
             Component appointmentDomain = appointmentBoundedContext.AddComponent("Appointment Domain Model", "Contiene todas las entidades del Bounded Context", "");
 
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
             springBootApi.Uses(appointmentController, "Llamada API");
             appointmentController.Uses(appointmentService, "Llamada a los métodos del service");
             appointmentService.Uses(appointmentRepository, "Llamada a los métodos de persistencia del repository");
@@ -170,10 +151,10 @@ namespace c4_model_design
             appointmentRepository.AddTags("appointmentRepository");
             appointmentDomain.AddTags("appointmentDomain");
             
-            styles.Add(new ElementStyle("appointmentController") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("appointmentService") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("appointmentRepository") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("appointmentDomain") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("appointmentController") {Background = "#F58900", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("appointmentService") {Background = "#F58900", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("appointmentRepository") {Background = "#F58900", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("appointmentDomain") {Background = "#F58900", Color = "#ffffff", Shape = Shape.Component});
 
             ComponentView componentView = viewSet.CreateComponentView(appointmentBoundedContext, "Components", "Component Diagram");
             componentView.PaperSize = PaperSize.A4_Landscape;
@@ -189,8 +170,7 @@ namespace c4_model_design
             Component publicationService = publicationBoundedContext.AddComponent("Publication Service", "Provee los métodos para la gestión de publicaciones", "");
             Component publicationRepository = publicationBoundedContext.AddComponent("Publication Repository", "Repositorio que provee los métodos para la persistencia de los datos de las publicaciones.", "");
             Component publicationDomain = publicationBoundedContext.AddComponent("Publication Domain Model", "Contiene todas las entidades del Bounded Context", "");
-
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
+            
             springBootApi.Uses(publicationController, "Llamada API");
             publicationController.Uses(publicationService, "Llamada a los métodos del service");
             publicationService.Uses(publicationRepository, "Llamada a los métodos de persistencia del repository");
@@ -203,10 +183,10 @@ namespace c4_model_design
             publicationRepository.AddTags("publicationRepository");
             publicationDomain.AddTags("publicationDomain");
             
-            styles.Add(new ElementStyle("publicationController") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationService") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationRepository") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationDomain") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("publicationController") {Background = "#760000", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("publicationService") {Background = "#760000", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("publicationRepository") {Background = "#760000", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("publicationDomain") {Background = "#760000", Color = "#ffffff", Shape = Shape.Component});
 
             ComponentView componentView2 = viewSet.CreateComponentView(publicationBoundedContext, "Components2", "Component Diagram");
             componentView2.PaperSize = PaperSize.A4_Landscape;
@@ -223,7 +203,6 @@ namespace c4_model_design
             Component technicalDomain = technicalBoundedContext.AddComponent("Technical Domain Model", "Contiene todas las entidades del Bounded Context");
             Component technicalValidation = technicalBoundedContext.AddComponent("Technical Validation", "Se encarga de validar que los datos del técnico son los correctos");
             
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
             springBootApi.Uses(technicalController, "Llamada API");
             technicalController.Uses(technicalService, "Llamada a los métodos del service");
             technicalService.Uses(technicalRepository, "Llamada a los métodos de persistencia del repository");
@@ -238,11 +217,11 @@ namespace c4_model_design
             technicalDomain.AddTags("technicalDomain");
             technicalValidation.AddTags("technicalValidation");
             
-            styles.Add(new ElementStyle("technicalController") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("technicalService") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("technicalRepository") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("technicalDomain") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("technicalValidation") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("technicalController") {Background = "#6D4C41", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("technicalService") {Background = "#6D4C41", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("technicalRepository") {Background = "#6D4C41", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("technicalDomain") {Background = "#6D4C41", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("technicalValidation") {Background = "#6D4C41", Color = "#ffffff", Shape = Shape.Component});
             
             ComponentView componentView3 = viewSet.CreateComponentView(technicalBoundedContext, "Components3", "Component Diagram");
             componentView3.PaperSize = PaperSize.A4_Landscape;
@@ -259,7 +238,6 @@ namespace c4_model_design
             Component userDomain = userBoundedContext.AddComponent("User Domain Model", "Contiene todas las entidades del Bounded Context");
             Component userValidation = userBoundedContext.AddComponent("User Validation", "Se encarga de validar que los datos del usuario son los correctos");
             
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
             springBootApi.Uses(userController, "Llamada API");
             userController.Uses(userService, "Llamada a los métodos del service");
             userService.Uses(userRepository, "Llamada a los métodos de persistencia del repository");
@@ -274,11 +252,11 @@ namespace c4_model_design
             userDomain.AddTags("userDomain");
             userValidation.AddTags("userValidation");
             
-            styles.Add(new ElementStyle("userController") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("userService") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("userRepository") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("userDomain") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("userValidation") {Background = "#FF57DE", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("userController") {Background = "#50126D", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("userService") {Background = "#50126D", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("userRepository") {Background = "#50126D", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("userDomain") {Background = "#50126D", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("userValidation") {Background = "#50126D", Color = "#ffffff", Shape = Shape.Component});
             
             ComponentView componentView4 = viewSet.CreateComponentView(userBoundedContext, "Components4", "Component Diagram");
             componentView4.PaperSize = PaperSize.A4_Landscape;
@@ -294,8 +272,7 @@ namespace c4_model_design
             Component stripeService = paymentBoundedContext.AddComponent("Stripe Service", "Servicio encargado de conectarse con la plataforma de PayPal para verificar el pago del cliente", "");
             Component paymentRepository = paymentBoundedContext.AddComponent("Payment Repository", "Provee los métodos para la persistencia de los datos de los pagos", "");
             Component paymentDomain = paymentBoundedContext.AddComponent("Payment Domain Model", "Contiene todas las entidades del Bounded Context", "");
-
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
+            
             springBootApi.Uses(paymentController, "Llamada API a");
             paymentController.Uses(paymentService, "Llamada a los métodos del service");
             paymentController.Uses(stripeService, "Llamada a los métodos del service");
@@ -332,8 +309,7 @@ namespace c4_model_design
             Component reportService = reportBoundedContext.AddComponent("Report Service", "Provee los métodos para la gestión de reportes", "");
             Component reportRepository = reportBoundedContext.AddComponent("Report Repository", "Repositorio que provee los métodos para la persistencia de los datos de los reportes.", "");
             Component reportDomain = reportBoundedContext.AddComponent("Report Domain Model", "Contiene todas las entidades del Bounded Context", "");
-
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
+            
             springBootApi.Uses(reportController, "Llamada API");
             reportController.Uses(reportService, "Llamada a los métodos del service");
             reportService.Uses(reportRepository, "Llamada a los métodos de persistencia del repository");
@@ -346,10 +322,10 @@ namespace c4_model_design
             reportRepository.AddTags("reportRepository");
             reportDomain.AddTags("reportDomain");
             
-            styles.Add(new ElementStyle("reportController") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("reportService") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("reportRepository") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("reportDomain") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("reportController") {Background = "#18FFFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("reportService") {Background = "#18FFFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("reportRepository") {Background = "#18FFFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("reportDomain") {Background = "#18FFFF", Color = "#ffffff", Shape = Shape.Component});
 
             ComponentView componentView6 = viewSet.CreateComponentView(reportBoundedContext, "Components6", "Component Diagram");
             componentView6.PaperSize = PaperSize.A4_Landscape;
@@ -361,36 +337,35 @@ namespace c4_model_design
             
             //Diagrama de componentes Appliance Category BC
             
-            Component publicationController = publicationBoundedContext.AddComponent("Publication Controller", "Controlador que provee los Rest API para la gestión de publiaciones", "");
-            Component publicationService = publicationBoundedContext.AddComponent("Publication Service", "Provee los métodos para la gestión de publicaciones", "");
-            Component publicationRepository = publicationBoundedContext.AddComponent("Publication Repository", "Repositorio que provee los métodos para la persistencia de los datos de las publicaciones.", "");
-            Component publicationDomain = publicationBoundedContext.AddComponent("Publication Domain Model", "Contiene todas las entidades del Bounded Context", "");
+            Component applianceCategoryController = applianceCategoryBoundedContext.AddComponent("Appliance Category Controller", "Controlador que provee los Rest API para la gestión de categorías de electrodomésticos", "");
+            Component applianceCategoryService = applianceCategoryBoundedContext.AddComponent("Appliance Category Service", "Provee los métodos para la gestión de categorías de electrodomésticos", "");
+            Component applianceCategoryRepository = applianceCategoryBoundedContext.AddComponent("Appliance Category Repository", "Repositorio que provee los métodos para la persistencia de los datos de las categorías de los electrodomésticos.", "");
+            Component applianceCategoryDomain = applianceCategoryBoundedContext.AddComponent("Appliance Category Domain Model", "Contiene todas las entidades del Bounded Context", "");
 
-            singlePageApplication.Uses(springBootApi, "Llamada API a");
-            springBootApi.Uses(publicationController, "Llamada API");
-            publicationController.Uses(publicationService, "Llamada a los métodos del service");
-            publicationService.Uses(publicationRepository, "Llamada a los métodos de persistencia del repository");
-            publicationDomain.Uses(publicationRepository, "Conforma");
-            publicationRepository.Uses(dataBase, "Lee desde y Escribe a");
+            springBootApi.Uses(applianceCategoryController, "Llamada API");
+            applianceCategoryController.Uses(applianceCategoryService, "Llamada a los métodos del service");
+            applianceCategoryService.Uses(applianceCategoryRepository, "Llamada a los métodos de persistencia del repository");
+            applianceCategoryDomain.Uses(applianceCategoryRepository, "Conforma");
+            applianceCategoryRepository.Uses(dataBase, "Lee desde y Escribe a");
             
             //Tags
-            publicationController.AddTags("publicationController");
-            publicationService.AddTags("publicationService");
-            publicationRepository.AddTags("publicationRepository");
-            publicationDomain.AddTags("publicationDomain");
+            applianceCategoryController.AddTags("applianceCategoryController");
+            applianceCategoryService.AddTags("applianceCategoryService");
+            applianceCategoryRepository.AddTags("applianceCategoryRepository");
+            applianceCategoryDomain.AddTags("applianceCategoryDomain");
             
-            styles.Add(new ElementStyle("publicationController") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationService") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationRepository") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
-            styles.Add(new ElementStyle("publicationDomain") {Background = "#234DFF", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("applianceCategoryController") {Background = "#FFEA00", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("applianceCategoryService") {Background = "#FFEA00", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("applianceCategoryRepository") {Background = "#FFEA00", Color = "#ffffff", Shape = Shape.Component});
+            styles.Add(new ElementStyle("applianceCategoryDomain") {Background = "#FFEA00", Color = "#ffffff", Shape = Shape.Component});
 
-            ComponentView componentView2 = viewSet.CreateComponentView(publicationBoundedContext, "Components2", "Component Diagram");
-            componentView2.PaperSize = PaperSize.A4_Landscape;
-            componentView2.Add(publicationBoundedContext);
-            componentView2.Add(springBootApi);
-            componentView2.Add(singlePageApplication);
-            componentView2.Add(dataBase);
-            componentView2.AddAllComponents();
+            ComponentView componentView7 = viewSet.CreateComponentView(applianceCategoryBoundedContext, "Components7", "Component Diagram");
+            componentView7.PaperSize = PaperSize.A4_Landscape;
+            componentView7.Add(applianceCategoryBoundedContext);
+            componentView7.Add(springBootApi);
+            componentView7.Add(singlePageApplication);
+            componentView7.Add(dataBase);
+            componentView7.AddAllComponents();
             
             structurizrClient.UnlockWorkspace(workspaceId);
             structurizrClient.PutWorkspace(workspaceId, workspace);
